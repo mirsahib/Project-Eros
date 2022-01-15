@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import {projectFireStore, projectStorage} from "../firebase/config"
+import {projectStorage} from "../firebase/config"
 
 const useStorage = (file)=>{
 
@@ -9,7 +9,7 @@ const useStorage = (file)=>{
 
     useEffect(()=>{
 
-        const storageRef = projectFireStore.ref(file.name)
+        const storageRef = projectStorage.ref(file.name)
 
         storageRef.put(file).on("state_changed",
             (snap)=>{
@@ -20,15 +20,13 @@ const useStorage = (file)=>{
                 setError(error)
             },
             async ()=>{
-                const url = storageRef.getDownloadRef() 
+                const url = storageRef.getDownloadURL()
                 setUrl(url)
             }
         )
-
-        return {progress,error,url}
-
     },[file])
 
+    return {progress,error,url}
 }
 
 export default useStorage
