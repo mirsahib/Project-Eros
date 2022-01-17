@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import {projectStorage} from "../firebase/config"
+import {projectStorage,projectFireStore,timeStamp} from "../firebase/config"
 
 const useStorage = (file)=>{
 
@@ -10,6 +10,7 @@ const useStorage = (file)=>{
     useEffect(()=>{
 
         const storageRef = projectStorage.ref(file.name)
+        const collectionRef = projectFireStore.collection('images')
 
         storageRef.put(file).on("state_changed",
             (snap)=>{
@@ -21,6 +22,7 @@ const useStorage = (file)=>{
             },
             async ()=>{
                 const url = await storageRef.getDownloadURL()
+                const createdAt = timeStamp()
                 setUrl(url)
             }
         )
